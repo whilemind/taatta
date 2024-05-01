@@ -33,11 +33,12 @@ public class Payload {
     private double temperature;
     private double tds;
 
-    @Column(updatable = false)
-    @CreationTimestamp
+
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
+//    @UpdateTimestamp
+    @Column(updatable = false)
+    @CreationTimestamp
     private LocalDateTime updatedAt;
 
 }

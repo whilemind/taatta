@@ -4,7 +4,10 @@ package edu.monash.humanise.smartcity;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 
 @Slf4j
@@ -14,6 +17,7 @@ public class Decoder {
 
     private double temperature;
     private double tds;
+    private LocalDateTime generate_at;
     public Decoder(String encoded) {
         this.encoded = encoded;
     }
@@ -60,6 +64,31 @@ public class Decoder {
             }
         } else {
             log.error("Second channel number {} is not valid", decoded[0]);
+        }
+        // channel 3 is for the generation time.
+        int year, month, day, hour, min, sec, milsec;
+        if((decoded[8] & 0xFF) == 3) {
+            year = ((decoded[10] & 0xFF) << 8) | (decoded[11] & 0xFF);
+            month = (decoded[12] & 0xFF);
+            day = (decoded[13] & 0xFF);
+
+            hour = (decoded[14] & 0xFF);
+            min = (decoded[15] & 0xFF);
+            sec = (decoded[16] & 0xFF);
+            milsec = ((decoded[17] & 0xFF) << 8) | (decoded[18] & 0xFF);
+//            String strDt = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec + "." + milsec;
+            String strDt = year + "-" +
+                    ((month < 10)? "0"+month : month) + "-" +
+                    ((day < 10)? "0"+day: day) + " " +
+                    ((hour < 10)? "0"+hour : hour) + ":" +
+                    ((min < 10)? "0"+min: min) + ":" +
+                    ((sec < 10)? "0"+sec: sec) + "." +
+                    ((milsec < 10)? "00"+milsec : (milsec < 100)? "0"+milsec: milsec);
+            log.info("The generation time stamp: {}", strDt);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+            this.generate_at = LocalDateTime.parse(strDt, formatter);
+        } else {
+            log.error("Time stamp is missing.");
         }
     }
 }

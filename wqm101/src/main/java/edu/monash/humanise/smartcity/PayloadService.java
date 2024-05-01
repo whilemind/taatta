@@ -17,6 +17,7 @@ public class PayloadService {
                 .devEUI(payloadRequest.devEUI())
                 .temperature(decoder.getTemperature())
                 .tds(decoder.getTds())
+                .createdAt(decoder.getGenerate_at())
                 .build();
         payloadRepository.save(payload);
     }

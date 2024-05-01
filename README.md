@@ -9,7 +9,15 @@ It is a Spring Boot application. Micro architecture methodology was followed to 
 - Can decode TBS220 payload.
 - Can decode df702 payload.
 
-## Run taatta component in Linux server as a service.
+## Development 
+### IDEA
+- IntelliJ IDEA 2022.2.1 (Community Edition)
+
+### Java version
+- openjdk 17.0.1 2021-10-19
+- OpenJDK Runtime Environment Temurin-17.0.1+12 (build 17.0.1+12)
+
+## Deploy taatta component in Linux server as a service.
 In order to run it as a service in Linux server Ubuntu 20.04 LTS you need to follow the below steps:
 
 ### Create new User and Group
